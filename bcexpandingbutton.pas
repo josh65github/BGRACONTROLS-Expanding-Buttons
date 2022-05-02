@@ -303,47 +303,6 @@ begin
   inherited Destroy;
 end;
 
-function TBCExpandingButton.TBCChangeColor(AColor:TColor; Lighten: Boolean; n: integer): TColor;
-var
-  r,g,b: integer;
-
-function minmax(avalue,amin,amax:integer):byte;
-begin
-  if avalue<amin then avalue:=amin;
-  if avalue>amax then avalue:=amax;
-  result:=byte(avalue);
-end;
-
-begin
-  if n<1 then exit(AColor);
-  AColor:=ColorToRGB (AColor);
-  R := AColor and $ff;
-  G := (AColor shr 8) and $ff;
-  B := (AColor shr 16) and $ff;
-  if Lighten then
-  begin
-    r:=r+round((r*n)/100);
-    g:=g+round((g*n)/100);
-    b:=b+round((b*n)/100);
-  end
-  else
-  begin
-    r:=r-round((r*n)/100);
-    g:=g-round((g*n)/100);
-    b:=b-round((b*n)/100);
-  end;
-  Result := minmax(r,0,255) or (minmax(g,0,255) shl 8) or (minmax(b,0,255) Shl 16);
-end;
-
-procedure TBCExpandingButton.FFreeAndNil(var obj);
-var
-  temp: tobject;
-begin
-  temp:=tobject(obj);
-  pointer(obj):=nil;
-  temp.free;
-end;
-
 procedure TBCExpandingButtonOptions.setFPanelShadowSize(const AValue:Integer);
 begin
   if FPanelShadowSize<> AValue then FPanelShadowSize:=AValue;
@@ -438,6 +397,112 @@ function TBCExpandingButton.IntToStringZeroPad(av,le:Integer):String;
 begin
   result:=myinttostr(av);
   while length(result)<le do result:='0'+result;
+end;
+
+procedure TBCExpandingButton.Paint;
+begin
+  inherited Paint;
+end;
+
+procedure TBCExpandingButton.setFAnswerText(const AValue: String);
+begin
+  if FAnswerText<> AValue then FAnswerText:=AValue;
+end;
+
+procedure TBCExpandingButton.setFSelected(const AValue: Integer);
+begin
+  if csDesigning in ComponentState then
+  begin
+    FSelected:=AValue;
+    exit;
+  end;
+  if FSelected<> AValue then If ((AValue>0) and (AValue<FHowManyButtons)) then FSelected:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFMaxWidth(const AValue: Integer);
+begin
+  if FMaxWidth<> AValue then If ((AValue>0) and (AValue<8000)) then FMaxWidth:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFButtonGap(const AValue: Integer);
+begin
+  if FButtonGap<> AValue then If ((AValue>0) and (AValue<40)) then FButtonGap:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFButtonHeight(const AValue: Integer);
+begin
+  if FButtonHeight<> AValue then If ((AValue>0) and (AValue<1000)) then FButtonHeight:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFButtonWidth(const AValue: Integer);
+begin
+  if FButtonWidth<> AValue then If ((AValue>0) and (AValue<1000)) then FButtonWidth:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.SetFBorderWidth(const AValue: Integer);
+begin
+  if FBorderWidth<> AValue then If ((AValue>0) and (AValue<100)) then FBorderWidth:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFDelimeter(const AValue: string);
+begin
+  if fdelimeter<> AValue then If AValue<>'' then fdelimeter:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFQuestions(const AValue: string);
+begin
+  if fQuestions<> AValue then If AValue<>'' then fQuestions:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFAnswers(const AValue: string);
+begin
+  if fAnswers<> AValue then If AValue<>'' then fAnswers:=AValue;
+end;
+
+procedure TBCExpandingButtonOptions.setFHints(const AValue: string);
+begin
+  if fhints<> AValue then If AValue<>'' then fhints:=AValue;
+end;
+
+procedure TBCExpandingButton.FFreeAndNil(var obj);
+var
+  temp: tobject;
+begin
+  temp:=tobject(obj);
+  pointer(obj):=nil;
+  temp.free;
+end;
+
+function TBCExpandingButton.TBCChangeColor(AColor:TColor; Lighten: Boolean; n: integer): TColor;
+var
+  r,g,b: integer;
+
+function minmax(avalue,amin,amax:integer):byte;
+begin
+  if avalue<amin then avalue:=amin;
+  if avalue>amax then avalue:=amax;
+  result:=byte(avalue);
+end;
+
+begin
+  if n<1 then exit(AColor);
+  AColor:=ColorToRGB (AColor);
+  R := AColor and $ff;
+  G := (AColor shr 8) and $ff;
+  B := (AColor shr 16) and $ff;
+  if Lighten then
+  begin
+    r:=r+round((r*n)/100);
+    g:=g+round((g*n)/100);
+    b:=b+round((b*n)/100);
+  end
+  else
+  begin
+    r:=r-round((r*n)/100);
+    g:=g-round((g*n)/100);
+    b:=b-round((b*n)/100);
+  end;
+  Result := minmax(r,0,255) or (minmax(g,0,255) shl 8) or (minmax(b,0,255) Shl 16);
 end;
 
 function TBCExpandingButton.MyIntToStr(AValue:Integer):String;
@@ -567,12 +632,6 @@ begin
   end;
 end;
 
-
-procedure TBCExpandingButton.Paint;
-begin
-  inherited Paint;
-end;
-
 procedure TBCExpandingButton.SubButtonOnClick(Sender:TObject);
 var v:integer;
     na:string;
@@ -634,66 +693,6 @@ begin
   begin
 
   end;
-end;
-
-procedure TBCExpandingButton.setFAnswerText(const AValue: String);
-begin
-  if FAnswerText<> AValue then FAnswerText:=AValue;
-end;
-
-procedure TBCExpandingButton.setFSelected(const AValue: Integer);
-begin
-  if csDesigning in ComponentState then
-  begin
-    FSelected:=AValue;
-    exit;
-  end;
-  if FSelected<> AValue then If ((AValue>0) and (AValue<FHowManyButtons)) then FSelected:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFMaxWidth(const AValue: Integer);
-begin
-  if FMaxWidth<> AValue then If ((AValue>0) and (AValue<8000)) then FMaxWidth:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFButtonGap(const AValue: Integer);
-begin
-  if FButtonGap<> AValue then If ((AValue>0) and (AValue<40)) then FButtonGap:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFButtonHeight(const AValue: Integer);
-begin
-  if FButtonHeight<> AValue then If ((AValue>0) and (AValue<1000)) then FButtonHeight:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFButtonWidth(const AValue: Integer);
-begin
-  if FButtonWidth<> AValue then If ((AValue>0) and (AValue<1000)) then FButtonWidth:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.SetFBorderWidth(const AValue: Integer);
-begin
-  if FBorderWidth<> AValue then If ((AValue>0) and (AValue<100)) then FBorderWidth:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFDelimeter(const AValue: string);
-begin
-  if fdelimeter<> AValue then If AValue<>'' then fdelimeter:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFQuestions(const AValue: string);
-begin
-  if fQuestions<> AValue then If AValue<>'' then fQuestions:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFAnswers(const AValue: string);
-begin
-  if fAnswers<> AValue then If AValue<>'' then fAnswers:=AValue;
-end;
-
-procedure TBCExpandingButtonOptions.setFHints(const AValue: string);
-begin
-  if fhints<> AValue then If AValue<>'' then fhints:=AValue;
 end;
 
 procedure TBCExpandingButton.CloseCode;
