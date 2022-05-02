@@ -29,23 +29,24 @@
       </Other>
     </CompilerOptions>
     <Version Release="19" Build="85"/>
-    <Files>
-      <Item>
+    <Files Count="1">
+      <Item1>
         <Filename Value="bcexpandingbutton.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="BCExpandingButton"/>
-      </Item>
+      </Item1>
     </Files>
-    <RequiredPkgs>
-      <Item>
+    <CompatibilityMode Value="True"/>
+    <RequiredPkgs Count="3">
+      <Item1>
         <PackageName Value="bgracontrols"/>
-      </Item>
-      <Item>
+      </Item1>
+      <Item2>
         <PackageName Value="BGRABitmapPack"/>
-      </Item>
-      <Item>
+      </Item2>
+      <Item3>
         <PackageName Value="FCL"/>
-      </Item>
+      </Item3>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>
