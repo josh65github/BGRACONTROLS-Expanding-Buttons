@@ -116,7 +116,6 @@ object Form1: TForm1
     ExpandingButOptions.ButtonStyle = btnSquare
     ExpandingButOptions.ButtonLayout = layHorizontal
     ExpandingButOptions.PanelColor = 7689269
-    ExpandingButOptions.PanelOpacity = 255
     ExpandingButOptions.PanelBorderColor = clWhite
     ExpandingButOptions.CustomState = False
     ExpandingButOptions.CustomStateNormal.Background.Color = 11369058
@@ -319,7 +318,6 @@ object Form1: TForm1
     ExpandingButOptions.ButtonStyle = btnOriginal
     ExpandingButOptions.ButtonLayout = layHorizontal
     ExpandingButOptions.PanelColor = 7689269
-    ExpandingButOptions.PanelOpacity = 255
     ExpandingButOptions.PanelBorderColor = clYellow
     ExpandingButOptions.CustomState = False
     ExpandingButOptions.CustomStateNormal.Background.Gradient1.StartColor = 6842472
@@ -525,7 +523,6 @@ object Form1: TForm1
     ExpandingButOptions.ButtonStyle = btnSquare
     ExpandingButOptions.ButtonLayout = layVertical
     ExpandingButOptions.PanelColor = clGreen
-    ExpandingButOptions.PanelOpacity = 255
     ExpandingButOptions.PanelBorderColor = clRed
     ExpandingButOptions.CustomState = False
     ExpandingButOptions.CustomStateNormal.Background.Color = 14803425
@@ -733,7 +730,6 @@ object Form1: TForm1
     ExpandingButOptions.ButtonStyle = btnOriginal
     ExpandingButOptions.ButtonLayout = layHorizontal
     ExpandingButOptions.PanelColor = clMaroon
-    ExpandingButOptions.PanelOpacity = 255
     ExpandingButOptions.PanelBorderColor = clYellow
     ExpandingButOptions.CustomState = False
     ExpandingButOptions.CustomStateNormal.Background.Gradient1.StartColor = 6842472
@@ -945,7 +941,6 @@ object Form1: TForm1
     ExpandingButOptions.ButtonStyle = btnSquare
     ExpandingButOptions.ButtonLayout = layVertical
     ExpandingButOptions.PanelColor = 7689269
-    ExpandingButOptions.PanelOpacity = 255
     ExpandingButOptions.PanelBorderColor = clYellow
     ExpandingButOptions.CustomState = True
     ExpandingButOptions.CustomStateNormal.Background.Color = clBlue
@@ -1272,7 +1267,6 @@ object Form1: TForm1
     ExpandingButOptions.ButtonStyle = btnSquare
     ExpandingButOptions.ButtonLayout = layHorizontal
     ExpandingButOptions.PanelColor = 14876672
-    ExpandingButOptions.PanelOpacity = 255
     ExpandingButOptions.PanelBorderColor = clYellow
     ExpandingButOptions.CustomState = False
     ExpandingButOptions.CustomStateNormal.Background.Color = clTeal
