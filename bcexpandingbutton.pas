@@ -54,7 +54,7 @@ type
     FPanelStyleCallOutHeight:Integer;
     FPanelShadow:Boolean;
     FPanelShadowSize:Integer;
-    FPanelOpacity:Byte;
+ //   FPanelOpacity:Byte;
     FCustomState:Boolean;
     FCallOutPositionTop:Boolean;
     FUpdateCaptionWithAnswer:Boolean;
@@ -75,7 +75,7 @@ type
     procedure setFMaxWidth(const AValue: Integer);
     procedure SetFCloseOnSelection(const AValue: Boolean);
     procedure setFPanelColor(const AValue:TColor);
-    procedure setFPanelOpacity(const AValue:Byte);
+ //   procedure setFPanelOpacity(const AValue:Byte);
     procedure setFPanelBorderColor(const AValue:TColor);
     procedure setFPanelStyle(const AValue:TBCExpandedPanelStyle);
     procedure setFPanelStyleCallOutHeight(const AValue:Integer);
@@ -118,7 +118,7 @@ type
     {Color of the panel holding the Buttons}
     property PanelColor: TColor Read FPanelColor Write setFPanelColor;
     {Opacity of the panel holding the Buttons}
-    property PanelOpacity: Byte Read FPanelOpacity Write setFPanelOpacity;
+//    property PanelOpacity: Byte Read FPanelOpacity Write setFPanelOpacity;
     {Color of the Border around the Panel}
     property PanelBorderColor: TColor Read FPanelBorderColor Write setFPanelBorderColor;
     {Allows you to have custom normal,hover and clicked states for the buttons}
@@ -236,7 +236,7 @@ begin
       FSubButtonLayout := ButtonLayout;
       FPanelBorderColor := PanelBorderColor;
       FPanelColor := PanelColor;
-      FPanelOpacity := PanelOpacity;
+//      FPanelOpacity := PanelOpacity;
       FCustomState:= CustomState;
       FCustomStateNormal:= CustomStateNormal;
       FCustomStateClicked:= CustomStateClicked;
@@ -270,7 +270,7 @@ begin
     FAlignPanel:=AlLeft;
     FPanelColor:=$00755435;
     FPanelBorderColor:=$00ffffff;
-    FPanelOpacity:=255;
+ //   FPanelOpacity:=255;
     FSubButtonStyle:=btnOriginal;
     FSubButtonLayout:=layHorizontal;
     FCloseOnSelection:=False;
@@ -373,10 +373,10 @@ begin
   if FPanelBorderColor<> AValue then FPanelBorderColor:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFPanelOpacity(const AValue:Byte);
+{procedure TBCExpandingButtonOptions.setFPanelOpacity(const AValue:Byte);
 begin
   if FPanelOpacity<> AValue then FPanelOpacity:=AValue;
-end;
+end;}
 
 procedure TBCExpandingButtonOptions.setFAlignPanel(const AValue:TBCExpandedButtonAllignStyle);
 begin
@@ -738,7 +738,7 @@ begin
       offset:=FExpandingButtonOptions.FPanelShadowSize;
       Pen.Style:=psSolid;
       Pen.Width:=1;
-      brush.Style:=bsclear;
+   //   brush.Style:=bsclear;
       yoff:=0;
       if ExpandingButOptions.PanelStyle=styCallout then
         yoff:=ExpandingButOptions.PanelStyleCallOutHeight-ExpandingButOptions.FPanelShadowSize;
@@ -789,7 +789,7 @@ begin
       addpoint(2,x2-offset,y2-offset);
       addpoint(3,x1,y2-offset);
       addpoint(4,x1,y1+offset);
-      polygon(pts);
+      polyGon(pts);
     end;
   end
   else
@@ -821,7 +821,7 @@ begin
         addpoint(4,x2-offset,y1+ExpandingButOptions.FPanelStyleCallOutHeight);
         addpoint(5,x2-offset,y2-offset);
         addpoint(6,x1,y2-offset);
-        addpoint(7,x1,y1+ExpandingButOptions.FPanelStyleCallOutHeight+offset);
+        addpoint(7,x1,y1+ExpandingButOptions.FPanelStyleCallOutHeight);
       end
       else
       begin
@@ -834,7 +834,7 @@ begin
         addpoint(6,x1,y2-ExpandingButOptions.FPanelStyleCallOutHeight-offset);
         addpoint(7,x1,y1);
       end;
-      polygon(pts);
+      polyGon(pts);
     end;
   end;
 end;
@@ -863,9 +863,9 @@ begin
   with FButtonHoldingPanel do
   begin
     Parent:=GetOwnerForm(self);
-    Background.Color:=FExpandingButtonOptions.FPanelColor;
-    Background.ColorOpacity:=255;
+    Background.Color:=FExpandingButtonOptions.PanelColor;
     Background.Style:=bbsColor;
+    Background.ColorOpacity:=255;
     ParentBackground:=false;
     visible:=false;
     BevelOuter:=bvNone;
