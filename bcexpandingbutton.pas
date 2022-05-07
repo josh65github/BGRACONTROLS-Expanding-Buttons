@@ -151,7 +151,7 @@ type
     FHowManyButtons:integer;
     FSelected:Integer;
     FAnswerText:String;
-    FBackGroundBmp:tbitmap;
+    FBackGroundBmp:TBitmap;
     FButtonQuestions,FButtonAnswers,FButtonHints:Array of AnsiString;
     FExpandingButtonOptions: TBCExpandingButtonOptions;
     FOnButtonClick: TNotifyEvent;
@@ -210,9 +210,9 @@ procedure TBCExpandingButton.Assign(Source: TPersistent);
 begin
   if Source is TBCExpandingButton then
   begin
-    FSelected:=TBCExpandingButton(source).Selected;
+    FSelected:=TBCExpandingButton(Source).Selected;
   end
-  else inherited;
+  else inherited Assign(Source);
 end;
 
 procedure TBCExpandingButtonOptions.Assign(Source: TPersistent);
@@ -762,9 +762,10 @@ begin
       end;
     end;
   end else offset:=0;
+  abgra.PutImage(0,0,fbackgroundbmp,dmSet);
   with ABGRA.Canvas do
   begin
-    Draw(0,0,FBackGroundBmp);
+ //   Draw(0,0,FBackGroundBmp);
     Pen.Color:=FExpandingButtonOptions.FPanelBorderColor;
     Pen.Style:=psSolid;
     Pen.Width:=FExpandingButtonOptions.FBorderWidth;
@@ -837,6 +838,7 @@ begin
       polyGon(pts);
     end;
   end;
+  setlength(pts,0);
 end;
 
 procedure TBCExpandingButton.GenerateControl;
@@ -849,7 +851,7 @@ var x,y,i,w:integer;
     OwnerFormWidth,OwnerFormHeight:integer;
     na:string;
 begin
-  FBackGroundBmp:=tbitmap.Create;
+  FBackGroundBmp:=TBitmap.Create;
   ExpandingButOptions.FCallOutPositionTop:=true;
   OwnerFormWidth:=GetOwnerForm(self).Width;
   OwnerFormHeight:=GetOwnerForm(self).height;
@@ -983,8 +985,11 @@ begin
   PanelHeight:=y+FExpandingButtonOptions.FButtonGap+FExpandingButtonOptions.FBorderWidth;
   FButtonHoldingPanel.SetBounds(PanelX,PanelY+1,PanelWidth,PanelHeight);
   FBackGroundBmp.SetSize(PanelWidth, PanelHeight);
+  //FBackGroundBmp.Canvas.CopyRect(tRect(0,0,PanelWidth,PanelHeight),GetOwnerForm(self).Canvas,trect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
+
   FBackGroundBmp.Canvas.CopyRect(Rect(0,0,PanelWidth,PanelHeight),
                                  GetOwnerForm(self).Canvas, rect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
+  //SetSelectedAsDown;
   FButtonHoldingPanel.Visible:=true;
 end;
 
