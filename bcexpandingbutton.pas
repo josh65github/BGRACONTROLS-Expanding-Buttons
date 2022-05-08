@@ -154,18 +154,18 @@ type
   //  FOnButtonClick: TNotifyEvent;
     FOnSelectionChange: TBCExpandedButtonSelectionChangedEvent;
     procedure SetExpandingButtonOptions(Value: TBCExpandingButtonOptions);
-    procedure expandoptions;
+    procedure AutoCreateCloseExpandingButtons;
     function IntToStringZeroPad(av,le:Integer):String;
     function MyIntToStr(AValue:Integer):String;
     function MyStrToIntDef(AValue:string;adef:integer):integer;
     procedure SubButtonOnClick(Sender:TObject);
     procedure SetSelectedAsDown;
-    procedure GenerateControl;
-    procedure CloseCode;
+    procedure GenerateExpandingButtonControls;
+    procedure CloseExpandingButtonsCode;
     procedure BCPanelAfterRender(Sender: TObject; const ABGRA: TBGRABitmap; ARect: TRect);
   protected
-    function countdelimeters(var st:ansistring):Integer;
-    procedure stringtoarray(var SA:Array of AnsiString;St:AnsiString;GenerateText:Boolean);
+    function CountDelimeters(var st:ansistring):Integer;
+    procedure StringToArray(var SA:Array of AnsiString;St:AnsiString;GenerateText:Boolean);
     function GetOwnerForm(AComponent: TComponent): TCustomForm;
     procedure FFreeAndNil(var obj);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;MX, MY: integer); override;
@@ -392,8 +392,8 @@ end;
 
 function TBCExpandingButton.IntToStringZeroPad(av,le:Integer):String;
 begin
-  result:=myinttostr(av);
-  while length(result)<le do result:='0'+result;
+  Result:=MyIntToStr(av);
+  while length(Result)<le do Result:='0'+Result;
 end;
 
 procedure TBCExpandingButton.Paint;
@@ -478,7 +478,7 @@ function minmax(avalue,amin,amax:integer):byte;
 begin
   if avalue<amin then avalue:=amin;
   if avalue>amax then avalue:=amax;
-  result:=byte(avalue);
+  Result:=byte(avalue);
 end;
 
 begin
@@ -506,17 +506,17 @@ function TBCExpandingButton.MyIntToStr(AValue:Integer):String;
 var digits:shortstring='0123456789';
     sgn:Boolean;
 begin
-  result:='';
+  Result:='';
   sgn:=AValue<0;
   if AValue>=10 then
   begin
     repeat
-      result:=digits[(AValue mod 10)+1]+result;
+      Result:=digits[(AValue mod 10)+1]+Result;
       AValue:=AValue div 10;
     until AValue<10;
   end;
-  result:=digits[(AValue mod 10)+1]+result;
-  if sgn then result:='-'+result;
+  Result:=digits[(AValue mod 10)+1]+Result;
+  if sgn then Result:='-'+Result;
 end;
 
 function TBCExpandingButton.MyStrToIntDef(AValue:string;adef:integer):integer;
@@ -525,7 +525,7 @@ var i:integer;
     mulply:integer=1;
     v:integer;
 begin
-  result:=0;
+  Result:=0;
   // validate and remove spaces
   for i:=1 to length(AValue) do
   begin
@@ -543,7 +543,7 @@ begin
     if ((v>=48) and (V<=57)) then
     begin
       // number
-      result:=result+((v-48)*mulply);
+      Result:=Result+((v-48)*mulply);
       mulply:=mulply*10;
     end
       else
@@ -551,31 +551,31 @@ begin
       begin
       end
        else
-       if ((AValue[i]='-') and (i=1)) then result:=-1*result
+       if ((AValue[i]='-') and (i=1)) then Result:=-1*Result
          else
          begin
-           result:=adef;
+           Result:=adef;
            break;
          end;
   end;
   begin
-    result:=result;
+    Result:=Result;
   end;
 end;
 
 
-function TBCExpandingButton.countdelimeters(var st:ansistring):Integer;
+function TBCExpandingButton.CountDelimeters(var st:ansistring):Integer;
 var c:integer=1;
     dl:integer;
 begin
-  result:=0;
+  Result:=0;
   if st='' then exit;
-  result:=0;
-  dl:=length(FExpandingButtonOptions.fdelimeter);
-  for c:= 1 to length(st)-dl+1 do if copy(st,c,dl)=FExpandingButtonOptions.fdelimeter then inc(result)
+  Result:=0;
+  dl:=length(FExpandingButtonOptions.FDelimeter);
+  for c:= 1 to length(st)-dl+1 do if copy(st,c,dl)=FExpandingButtonOptions.FDelimeter then inc(Result)
 end;
 
-procedure TBCExpandingButton.stringtoarray(var SA:Array of AnsiString;St:AnsiString;GenerateText:Boolean);
+procedure TBCExpandingButton.StringToArray(var SA:Array of AnsiString;St:AnsiString;GenerateText:Boolean);
 var I_cnt,C_cnt:Integer;
     s:ansistring;
 begin
@@ -586,7 +586,7 @@ begin
     I_cnt:=2;
     while I_cnt< length(st) do
     begin
-      if copy(st,I_cnt,length(FExpandingButtonOptions.fdelimeter))=FExpandingButtonOptions.fdelimeter then
+      if copy(st,I_cnt,length(FExpandingButtonOptions.FDelimeter))=FExpandingButtonOptions.FDelimeter then
       begin
         sa[C_cnt]:=s;
         inc(C_cnt);
@@ -647,7 +647,7 @@ begin
   if assigned(self.OnSelectionChanged) then OnSelectionChanged(self,FSelected);
   if FExpandingButtonOptions.FCloseOnSelection then
   begin
-    closecode;
+    CloseExpandingButtonsCode;
   end;
 end;
 
@@ -675,7 +675,7 @@ begin
 
   if (Button = mbLeft) and Enabled then
   begin
-    expandoptions;
+    AutoCreateCloseExpandingButtons;
   end;
 end;
 
@@ -692,7 +692,7 @@ begin
   end;
 end;
 
-procedure TBCExpandingButton.CloseCode;
+procedure TBCExpandingButton.CloseExpandingButtonsCode;
 begin
   if assigned(FButtonHoldingPanel) then
   begin
@@ -838,7 +838,7 @@ begin
   setlength(pts,0);
 end;
 
-procedure TBCExpandingButton.GenerateControl;
+procedure TBCExpandingButton.GenerateExpandingButtonControls;
 var x,y,i,w:integer;
     ButtonPoint: TPoint;
     PanelX,PanelY,PanelWidth,PanelHeight:Integer;
@@ -982,11 +982,8 @@ begin
   PanelHeight:=y+FExpandingButtonOptions.FButtonGap+FExpandingButtonOptions.FBorderWidth;
   FButtonHoldingPanel.SetBounds(PanelX,PanelY+1,PanelWidth,PanelHeight);
   FBackGroundBmp.SetSize(PanelWidth, PanelHeight);
-  //FBackGroundBmp.Canvas.CopyRect(tRect(0,0,PanelWidth,PanelHeight),GetOwnerForm(self).Canvas,trect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
-
   FBackGroundBmp.Canvas.CopyRect(Rect(0,0,PanelWidth,PanelHeight),
                                  GetOwnerForm(self).Canvas, rect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
-  //SetSelectedAsDown;
   FButtonHoldingPanel.Visible:=true;
 end;
 
@@ -995,7 +992,7 @@ begin
   FExpandingButtonOptions.Assign(Value);
 end;
 
-procedure TBCExpandingButton.expandoptions;
+procedure TBCExpandingButton.AutoCreateCloseExpandingButtons;
 begin
   FHowManyButtons:=countdelimeters(FExpandingButtonOptions.fquestions);
   if FHowManyButtons=0 then
@@ -1010,11 +1007,11 @@ begin
   stringtoarray(FButtonHints,FExpandingButtonOptions.fhints,false);
   if assigned(FButtonHoldingPanel) then
   begin
-    CloseCode;
+    CloseExpandingButtonsCode;
   end
   else
   begin
-    GenerateControl;
+    GenerateExpandingButtonControls;
   end;
 end;
 
