@@ -35,7 +35,7 @@ type
   TBCExpandingButtonOptions = class(TPersistent)
   private
     FDelimeter:String;
-    FQuestions,FAnswers,FHints:String;
+    FExpanedButtonCaptions,FExpanedButtonAnswers,FExpanedButtonHints:String;
     FBorderWidth:integer;
     FButtonGap:Integer;
     FButtonHeight:Integer;
@@ -62,9 +62,9 @@ type
     procedure setFCustomStateClicked(const AValue: TBCButtonState);
     procedure setFCustomStateHover(const AValue: TBCButtonState);
     procedure setFDelimeter(const AValue: string);
-    procedure setFQuestions(const AValue: string);
-    procedure setFAnswers(const AValue: string);
-    procedure setFHints(const AValue: string);
+    procedure setFExpanedButtonCaptions(const AValue: string);
+    procedure setFExpanedButtonAnswers(const AValue: string);
+    procedure setFExpanedButtonHints(const AValue: string);
     procedure setFBorderWidth(const AValue: Integer);
     procedure setFButtonGap(const AValue: Integer);
     procedure setFButtonHeight(const AValue: Integer);
@@ -86,14 +86,14 @@ type
     procedure setFSubButtonLayout(const AValue:TBCExpandedButtonLayout);
     procedure Assign(Source: TPersistent); override;
   published
-    {Delimeter used to split button questions, answers and hints, ie ","}
+    {Delimeter used to split button captionss, answers and hints, ie ","}
     Property ButtonCSVDelimterString : String Read FDelimeter Write setFDelimeter;
     {CSV list of Button Texts ie "Button 1","Button 2"}
-    Property ButtonCSVQuestions : String Read FQuestions Write setFQuestions;
+    Property ButtonCSVCaptions : String Read FExpanedButtonCaptions Write setFExpanedButtonCaptions;
     {CSV list of Button Answers ie "Button 1","Button 2"}
-    Property ButtonCSVAnswers : String Read FAnswers Write setFAnswers;
+    Property ButtonCSVAnswers : String Read FExpanedButtonAnswers Write setFExpanedButtonAnswers;
     {CSV list of Button Hints  ie "Button 1 hint message","Button 2 hint message"}
-    Property ButtonCSVHints : String Read FHints Write setFHints;
+    Property ButtonCSVHints : String Read FExpanedButtonHints Write setFExpanedButtonHints;
     {Width of the border arounf the Panel}
     Property PanelBorderWidth : Integer Read FBorderWidth Write setFBorderWidth;
     {Gap in pixels between each button}
@@ -149,7 +149,7 @@ type
     FSelected:Integer;
     FAnswerText:String;
     FBackGroundBmp:TBitmap;
-    FButtonQuestions,FButtonAnswers,FButtonHints:Array of AnsiString;
+    FButtonCaptions,FButtonAnswers,FButtonHints:Array of AnsiString;
     FExpandingButtonOptions: TBCExpandingButtonOptions;
   //  FOnButtonClick: TNotifyEvent;
     FOnSelectionChange: TBCExpandedButtonSelectionChangedEvent;
@@ -219,9 +219,9 @@ begin
     with TBCExpandingButtonOptions(Source) do
     begin
       FDelimeter :=ButtonCSVDelimterString;
-      FQuestions := ButtonCSVQuestions;
-      FAnswers := ButtonCSVAnswers;
-      FHints := ButtonCSVHints;
+      FExpanedButtonCaptions := ButtonCSVCaptions;
+      FExpanedButtonAnswers := ButtonCSVAnswers;
+      FExpanedButtonHints := ButtonCSVHints;
       FBorderWidth := PanelBorderWidth;
       FButtonGap:=ButtonGap;
       FButtonHeight := ButtonHeight;
@@ -446,19 +446,19 @@ begin
   if fdelimeter<> AValue then If AValue<>'' then fdelimeter:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFQuestions(const AValue: string);
+procedure TBCExpandingButtonOptions.setFExpanedButtonCaptions(const AValue: string);
 begin
-  if fQuestions<> AValue then If AValue<>'' then fQuestions:=AValue;
+  if fExpanedButtonCaptions<> AValue then If AValue<>'' then fExpanedButtonCaptions:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFAnswers(const AValue: string);
+procedure TBCExpandingButtonOptions.setFExpanedButtonAnswers(const AValue: string);
 begin
-  if fAnswers<> AValue then If AValue<>'' then fAnswers:=AValue;
+  if fExpanedButtonAnswers<> AValue then If AValue<>'' then fExpanedButtonAnswers:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFHints(const AValue: string);
+procedure TBCExpandingButtonOptions.setFExpanedButtonHints(const AValue: string);
 begin
-  if fhints<> AValue then If AValue<>'' then fhints:=AValue;
+  if fExpanedButtonhints<> AValue then If AValue<>'' then fExpanedButtonhints:=AValue;
 end;
 
 procedure TBCExpandingButton.FFreeAndNil(var obj);
@@ -638,7 +638,7 @@ begin
   if v>=0 then
   begin
     if FButtonAnswers[v]<>'' then AnswerText:=FButtonAnswers[v]
-    else AnswerText:=FButtonQuestions[v];
+    else AnswerText:=FButtonCaptions[v];
     Selected:=v;
     SetSelectedAsDown;
     update;
@@ -912,7 +912,7 @@ begin
       CalculatingMaxX:=x+FExpandingButtonOptions.FButtonWidth;
       Cursor:=self.Cursor;
       Down:=fselected=i;
-      Caption:=FButtonQuestions[i];
+      Caption:=FButtonCaptions[i];
       OnClick:=@self.SubButtonOnClick;
       visible:=true;
       Hint:=FButtonHints[i];
@@ -983,7 +983,7 @@ begin
   FButtonHoldingPanel.SetBounds(PanelX,PanelY+1,PanelWidth,PanelHeight);
   FBackGroundBmp.SetSize(PanelWidth, PanelHeight);
   FBackGroundBmp.Canvas.CopyRect(Rect(0,0,PanelWidth,PanelHeight),
-                                 GetOwnerForm(self).Canvas, rect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
+                                 GetOwnerForm(self).Canvas, Rect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
   FButtonHoldingPanel.Visible:=true;
 end;
 
@@ -994,17 +994,17 @@ end;
 
 procedure TBCExpandingButton.AutoCreateCloseExpandingButtons;
 begin
-  FHowManyButtons:=countdelimeters(FExpandingButtonOptions.FQuestions);
+  FHowManyButtons:=countdelimeters(FExpandingButtonOptions.FExpanedButtonCaptions);
   if FHowManyButtons=0 then
   begin
     exit;
   end;
-  setlength(FButtonQuestions,FHowManyButtons+1);
+  setlength(FButtonCaptions,FHowManyButtons+1);
   setlength(FButtonAnswers,FHowManyButtons+1);
   setlength(FButtonHints,FHowManyButtons+1);
-  stringtoarray(FButtonQuestions,FExpandingButtonOptions.FQuestions,true);
-  stringtoarray(FButtonAnswers,FExpandingButtonOptions.FAnswers,true);
-  stringtoarray(FButtonHints,FExpandingButtonOptions.FHints,false);
+  stringtoarray(FButtonCaptions,FExpandingButtonOptions.FExpanedButtonCaptions,true);
+  stringtoarray(FButtonAnswers,FExpandingButtonOptions.FExpanedButtonAnswers,true);
+  stringtoarray(FButtonHints,FExpandingButtonOptions.FExpanedButtonHints,false);
   if assigned(FButtonHoldingPanel) then
   begin
     CloseExpandingButtonsCode;

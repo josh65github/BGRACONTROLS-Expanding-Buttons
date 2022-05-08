@@ -28,7 +28,7 @@
         <WriteFPCLogo Value="False"/>
       </Other>
     </CompilerOptions>
-    <Version Release="23" Build="96"/>
+    <Version Release="27" Build="106"/>
     <Files Count="1">
       <Item1>
         <Filename Value="bcexpandingbutton.pas"/>
