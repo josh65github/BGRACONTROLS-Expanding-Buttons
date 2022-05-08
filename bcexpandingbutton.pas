@@ -1,14 +1,11 @@
 // SPDX-License-Identifier: LGPL-3.0-linking-exception
 { Written in 2022 by User Josh on Lazarus Forum.
-
   Expanding button, that creates on the fly buttons to create selections,
   various styles callout
   button captions, answers and hints are in a csv line of text.
   callout can be above, below, or auto
   layout can be horizontal or vertical.
   a border can be set arount the callout buttons, and also around the calling button.
-
-
   This Component uses the BGRABITMAP and BGRACONTROLS Framework to implement
   the Button's Functionality
 }
@@ -154,7 +151,7 @@ type
     FBackGroundBmp:TBitmap;
     FButtonQuestions,FButtonAnswers,FButtonHints:Array of AnsiString;
     FExpandingButtonOptions: TBCExpandingButtonOptions;
-    FOnButtonClick: TNotifyEvent;
+  //  FOnButtonClick: TNotifyEvent;
     FOnSelectionChange: TBCExpandedButtonSelectionChangedEvent;
     procedure SetExpandingButtonOptions(Value: TBCExpandingButtonOptions);
     procedure expandoptions;
