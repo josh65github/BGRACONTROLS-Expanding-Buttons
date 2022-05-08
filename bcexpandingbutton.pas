@@ -160,7 +160,7 @@ type
     function MyStrToIntDef(AValue:string;adef:integer):integer;
     procedure SubButtonOnClick(Sender:TObject);
     procedure SetSelectedAsDown;
-    procedure GenerateExpandingButtonControls;
+    procedure GenerateExpandingButtonsControl;
     procedure CloseExpandingButtonsCode;
     procedure BCPanelAfterRender(Sender: TObject; const ABGRA: TBGRABitmap; ARect: TRect);
   protected
@@ -660,7 +660,7 @@ begin
     for i:=0 to FHowManyButtons do
     begin
       na:=self.Name+SubButtonName+IntToStringZeroPad(i,4);
-      tbcbutton(FButtonHoldingPanel.findcomponent(na)).down:=i=FSelected;
+      tbcbutton(FButtonHoldingPanel.FindComponent(na)).Down:=i=FSelected;
     end;
     if FExpandingButtonOptions.FUpdateCaptionWithAnswer then TBCButton(self).Caption:=AnswerText;
   end;
@@ -838,7 +838,7 @@ begin
   setlength(pts,0);
 end;
 
-procedure TBCExpandingButton.GenerateExpandingButtonControls;
+procedure TBCExpandingButton.GenerateExpandingButtonsControl;
 var x,y,i,w:integer;
     ButtonPoint: TPoint;
     PanelX,PanelY,PanelWidth,PanelHeight:Integer;
@@ -994,7 +994,7 @@ end;
 
 procedure TBCExpandingButton.AutoCreateCloseExpandingButtons;
 begin
-  FHowManyButtons:=countdelimeters(FExpandingButtonOptions.fquestions);
+  FHowManyButtons:=countdelimeters(FExpandingButtonOptions.FQuestions);
   if FHowManyButtons=0 then
   begin
     exit;
@@ -1002,16 +1002,16 @@ begin
   setlength(FButtonQuestions,FHowManyButtons+1);
   setlength(FButtonAnswers,FHowManyButtons+1);
   setlength(FButtonHints,FHowManyButtons+1);
-  stringtoarray(FButtonQuestions,FExpandingButtonOptions.fquestions,true);
-  stringtoarray(FButtonAnswers,FExpandingButtonOptions.fanswers,true);
-  stringtoarray(FButtonHints,FExpandingButtonOptions.fhints,false);
+  stringtoarray(FButtonQuestions,FExpandingButtonOptions.FQuestions,true);
+  stringtoarray(FButtonAnswers,FExpandingButtonOptions.FAnswers,true);
+  stringtoarray(FButtonHints,FExpandingButtonOptions.FHints,false);
   if assigned(FButtonHoldingPanel) then
   begin
     CloseExpandingButtonsCode;
   end
   else
   begin
-    GenerateExpandingButtonControls;
+    GenerateExpandingButtonsControl;
   end;
 end;
 
