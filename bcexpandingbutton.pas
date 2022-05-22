@@ -177,7 +177,6 @@ type
     procedure StringToArray(var SA:Array of AnsiString;St:AnsiString;GenerateText:Boolean);
     function GetOwnerForm(AComponent: TComponent): TCustomForm;
     function FindFormByName(const AName: string): TForm;
-    procedure xFFreeAndNil(var obj);
     procedure MouseDown(Button: TMouseButton; Shift: TShiftState;MX, MY: integer); override;
     procedure ButMouseDown(Button: TMouseButton; Shift: TShiftState; MX, MY: integer);
     function TBCChangeColor(AColor:TColor; Lighten: Boolean; n: integer): TColor;
@@ -478,15 +477,6 @@ end;
 procedure TBCExpandingButtonOptions.setFExpanedButtonHints(const AValue: string);
 begin
   if fExpanedButtonhints<> AValue then If AValue<>'' then fExpanedButtonhints:=AValue;
-end;
-
-procedure TBCExpandingButton.xFFreeAndNil(var obj);
-var
-  temp: tobject;
-begin
-  temp:=tobject(obj);
-  pointer(obj):=nil;
-  temp.free;
 end;
 
 function TBCExpandingButton.TBCChangeColor(AColor:TColor; Lighten: Boolean; n: integer): TColor;
