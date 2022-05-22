@@ -8,7 +8,7 @@ object Form1: TForm1
   ClientWidth = 1006
   Color = 3211264
   DesignTimePPI = 120
-  LCLVersion = '2.3.0.0'
+  LCLVersion = '2.2.3.0'
   object BCExpandingButton1: TBCExpandingButton
     Left = 128
     Height = 41
@@ -1053,7 +1053,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label1'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1066,7 +1065,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label2'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1079,7 +1077,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label3'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1092,7 +1089,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label4'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1105,7 +1101,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label5'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1118,7 +1113,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label6'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1131,7 +1125,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label7'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1144,7 +1137,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label8'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1157,7 +1149,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label9'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1170,7 +1161,6 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label10'
-    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
