@@ -96,6 +96,8 @@ object Form1: TForm1
     DropDownWidth = 16
     DropDownArrowSize = 8
     GlobalOpacity = 255
+    OnMouseLeave = BCExpandingButton1MouseLeave
+    OnMouseUp = BCExpandingButton1MouseUp
     ParentColor = False
     Rounding.RoundX = 1
     Rounding.RoundY = 1
@@ -103,6 +105,7 @@ object Form1: TForm1
     RoundingDropDown.RoundY = 1
     TextApplyGlobalOpacity = False
     MemoryUsage = bmuHigh
+    ExpandingButOptions.AutoExpand = False
     ExpandingButOptions.ButtonCSVDelimterString = '","'
     ExpandingButOptions.ButtonCSVCaptions = '"But A","But B","But C","But D","But E","But F","But G","But H","But I","But J","But K","But L","But M","But N","But O","But P","But Q","But R","But S","But T","But U","But V","But W","But X","But Y","But Z"'
     ExpandingButOptions.ButtonCSVAnswers = '"Answer 1","Answer 2","Answer 3","Answer 4","Answer 5","Answer 6","Answer 7","Answer 8","Answer 9","Answer 10","Answer 11","Answer 12","Answer 13","Answer 14","Answer 15","Answer 16","Answer 17","Answer 18","Answer 19","Answer 20","Answer 21","Answer 22","Answer 23","Answer 24","Answer 25","Answer 26"'
@@ -306,6 +309,7 @@ object Form1: TForm1
     RoundingDropDown.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
     TextApplyGlobalOpacity = False
     MemoryUsage = bmuHigh
+    ExpandingButOptions.AutoExpand = True
     ExpandingButOptions.ButtonCSVDelimterString = '","'
     ExpandingButOptions.ButtonCSVCaptions = '"But A","But B2"'
     ExpandingButOptions.PanelBorderWidth = 2
@@ -511,6 +515,7 @@ object Form1: TForm1
     RoundingDropDown.RoundY = 1
     TextApplyGlobalOpacity = False
     MemoryUsage = bmuHigh
+    ExpandingButOptions.AutoExpand = True
     ExpandingButOptions.ButtonCSVDelimterString = '","'
     ExpandingButOptions.ButtonCSVCaptions = '"A","But B2","But C","But D"'
     ExpandingButOptions.PanelBorderWidth = 2
@@ -718,6 +723,7 @@ object Form1: TForm1
     RoundingDropDown.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
     TextApplyGlobalOpacity = False
     MemoryUsage = bmuHigh
+    ExpandingButOptions.AutoExpand = False
     ExpandingButOptions.ButtonCSVDelimterString = '","'
     ExpandingButOptions.ButtonCSVCaptions = '"But A","But B2"'
     ExpandingButOptions.PanelBorderWidth = 2
@@ -928,6 +934,7 @@ object Form1: TForm1
     RoundingDropDown.RoundOptions = [rrTopLeftSquare, rrTopRightSquare, rrBottomRightSquare, rrBottomLeftSquare]
     TextApplyGlobalOpacity = False
     MemoryUsage = bmuHigh
+    ExpandingButOptions.AutoExpand = False
     ExpandingButOptions.ButtonCSVDelimterString = '","'
     ExpandingButOptions.ButtonCSVCaptions = '"But A","But B2","But C","But D","But E","But F"'
     ExpandingButOptions.ButtonCSVHints = '"Some Hint","Another Hint","Something else","hello hint","more hint","extra hint"'
@@ -1046,6 +1053,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label1'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1058,6 +1066,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label2'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1070,6 +1079,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label3'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1082,6 +1092,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label4'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1094,6 +1105,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label5'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1106,6 +1118,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label6'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1118,6 +1131,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label7'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1130,6 +1144,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label8'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1142,6 +1157,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label9'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1154,6 +1170,7 @@ object Form1: TForm1
     Alignment = taCenter
     AutoSize = False
     Caption = 'Label10'
+    Color = clDefault
     Font.Color = clWhite
     ParentColor = False
     ParentFont = False
@@ -1253,6 +1270,7 @@ object Form1: TForm1
     RoundingDropDown.RoundY = 1
     TextApplyGlobalOpacity = False
     MemoryUsage = bmuHigh
+    ExpandingButOptions.AutoExpand = True
     ExpandingButOptions.ButtonCSVDelimterString = '","'
     ExpandingButOptions.ButtonCSVCaptions = '"Output Stereo","Output Mono","Output Left","Output Right"'
     ExpandingButOptions.ButtonCSVAnswers = '"Stereo","Mono","Left","Right"'

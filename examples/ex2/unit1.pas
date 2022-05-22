@@ -29,6 +29,9 @@ type
     Label7: TLabel;
     Label8: TLabel;
     Label9: TLabel;
+    procedure BCExpandingButton1MouseLeave(Sender: TObject);
+    procedure BCExpandingButton1MouseUp(Sender: TObject; Button: TMouseButton;
+      Shift: TShiftState; X, Y: Integer);
     procedure BCExpandingButton1SelectionChanged(Sender: TObject; Value: Integer
       );
     procedure BCExpandingButton2SelectionChanged(Sender: TObject; Value: Integer
@@ -39,6 +42,7 @@ type
       );
     procedure BCExpandingButton5SelectionChanged(Sender: TObject; Value: Integer
       );
+    procedure BCPanel1MouseLeave(Sender: TObject);
   private
 
   public
@@ -66,6 +70,17 @@ begin
   updatelabels(label1,label2,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
 end;
 
+procedure TForm1.BCExpandingButton1MouseUp(Sender: TObject;
+  Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+begin
+
+end;
+
+procedure TForm1.BCExpandingButton1MouseLeave(Sender: TObject);
+begin
+
+end;
+
 procedure TForm1.BCExpandingButton2SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
@@ -88,6 +103,11 @@ procedure TForm1.BCExpandingButton5SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
   updatelabels(label9,label10,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
+end;
+
+procedure TForm1.BCPanel1MouseLeave(Sender: TObject);
+begin
+
 end;
 
 end.
