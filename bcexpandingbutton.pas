@@ -101,7 +101,7 @@ type
     Property ButtonCSVAnswers : String Read FExpanedButtonAnswers Write setFExpanedButtonAnswers;
     {CSV list of Button Hints  ie "Button 1 hint message","Button 2 hint message"}
     Property ButtonCSVHints : String Read FExpanedButtonHints Write setFExpanedButtonHints;
-    {Width of the border arounf the Panel}
+    {Width of the border around the Panel}
     Property PanelBorderWidth : Integer Read FBorderWidth Write setFBorderWidth;
     {Gap in pixels between each button}
     Property ButtonGap : Integer Read FButtonGap Write setFButtonGap;
@@ -121,8 +121,6 @@ type
     property ButtonLayout: TBCExpandedButtonLayout read FSubButtonLayout write setFSubButtonLayout;
     {Color of the panel holding the Buttons}
     property PanelColor: TColor Read FPanelColor Write setFPanelColor;
-    {Opacity of the panel holding the Buttons}
-//    property PanelOpacity: Byte Read FPanelOpacity Write setFPanelOpacity;
     {Color of the Border around the Panel}
     property PanelBorderColor: TColor Read FPanelBorderColor Write setFPanelBorderColor;
     {Allows you to have custom normal,hover and clicked states for the buttons}
@@ -137,7 +135,7 @@ type
     property PanelStyle:TBCExpandedPanelStyle Read FPanelStyle Write setFPanelStyle;
     {Height of the Callout when PanStyle=StyCallOut}
     property PanelStyleCallOutHeight:Integer Read FPanelStyleCallOutHeight Write setFPanelStyleCallOutHeight;
-    {Allows you to specify the callout positiio (StyAbove,styBelow,StyAuto)}
+    {Allows you to specify the callout position (StyAbove,styBelow,StyAuto)}
     property PanelStyleCalloutPosition:TBCExpandedCallOutPosition read FPanelStyleCallOutPosition Write setFPanelStyleCallOutPosition;
     {Draw a Shadow around the Panel}
     property PanelShadow:Boolean Read FPanelShadow Write setFPanelShadow;
