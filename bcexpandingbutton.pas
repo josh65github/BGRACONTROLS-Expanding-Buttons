@@ -250,9 +250,6 @@ begin
       FCustomStateNormal.Assign(FCustomStateNormal);
       FCustomStateClicked.Assign(FCustomStateClicked);
       FCustomStateHover.Assign(FCustomStateHover);
-    //  FCustomStateNormal:= CustomStateNormal;
-    //  FCustomStateClicked:= CustomStateClicked;
-    //  FCustomStateHover:= CustomStateHover;
       FPanelStyle:=PanelStyle;
       FPanelStyleCallOutHeight:=PanelStyleCallOutHeight;
       FPanelShadow:=PanelShadow;
@@ -292,9 +289,9 @@ begin
     PanelStyle:=styHeaded;
     PanelStyleCallOutHeight:=10;
     PanelStyleCalloutPosition:=styAuto;
-    FCustomStateNormal:= TBCButtonState.Create(Self);//self.StateNormal;//CloneProperty(self.StateNormal,true,'StateNormal');
-    FCustomStateClicked:= TBCButtonState.Create(Self);//self.StateClicked;
-    FCustomStateHover:= TBCButtonState.Create(Self);//self.StateHover;
+    FCustomStateNormal:= TBCButtonState.Create(Self);
+    FCustomStateClicked:= TBCButtonState.Create(Self);
+    FCustomStateHover:= TBCButtonState.Create(Self);
     FUpdateCaptionWithAnswer:=false;
   end;
   FSelected:=0;
@@ -368,17 +365,17 @@ end;
 
 procedure TBCExpandingButtonOptions.setFCustomStateNormal(const AValue: TBCExpButState);
 begin
-  if FCustomStateNormal<> AValue then FCustomStateNormal.Assign(AValue);//FCustomStateNormal:=AValue;
+  if FCustomStateNormal<> AValue then FCustomStateNormal.Assign(AValue);
 end;
 
 procedure TBCExpandingButtonOptions.setFCustomStateClicked(const AValue: TBCExpButState);
 begin
-  if FCustomStateClicked<> AValue then FCustomStateClicked.Assign(AValue);//FCustomStateClicked:=AValue;
+  if FCustomStateClicked<> AValue then FCustomStateClicked.Assign(AValue);
 end;
 
 procedure TBCExpandingButtonOptions.setFCustomStateHover(const AValue: TBCExpButState);
 begin
-  if FCustomStateHover<> AValue then FCustomStateHover.Assign(AValue);//FCustomStateHover:=AValue;
+  if FCustomStateHover<> AValue then FCustomStateHover.Assign(AValue);
 end;
 
 procedure TBCExpandingButtonOptions.setFCloseOnSelection(const AValue:Boolean);
