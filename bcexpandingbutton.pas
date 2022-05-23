@@ -18,7 +18,7 @@ unit BCExpandingButton;
 interface
 
 uses
-  Classes,{ SysUtils,} LResources, Forms, Controls, Graphics,BCPanel,{ Dialogs,}BCButton, BCTypes,BGRABitmap,BGRABitmapTypes, BGRAShape;
+  Classes,{ SysUtils,} LResources, Forms, typinfo, Controls, Graphics,BCPanel,{ Dialogs,}BCButton, BCTypes,BGRABitmap,BGRABitmapTypes, BGRAShape;
 
 const SubButtonName='_SubButton_';
       SubButtonPanelName=SubButtonName+'Panel';
@@ -29,6 +29,7 @@ type
   TMsgData = record
     APan: tbcpanel;
   end;
+  TBCExpButState=TBCButtonState;
   PMsgData = ^TMsgData;
   TBCExpandedButtonAllignStyle = (alLeft,alRight,alCenter);
   TBCExpandedButtonStyle = (btnOriginal,btnSquare);
@@ -59,13 +60,13 @@ type
     FCallOutPositionTop:Boolean;
     FAutoExpand:Boolean;
     FUpdateCaptionWithAnswer:Boolean;
-    FCustomStateNormal,FCustomStateClicked,FCustomStateHover:TBCButtonState;
+    FCustomStateNormal,FCustomStateClicked,FCustomStateHover:TBCExpButState;
   public
     procedure setFAutoExpand(const AValue: boolean);
     procedure setFCustomState(const AValue: boolean);
-    procedure setFCustomStateNormal(const AValue: TBCButtonState);
-    procedure setFCustomStateClicked(const AValue: TBCButtonState);
-    procedure setFCustomStateHover(const AValue: TBCButtonState);
+    procedure setFCustomStateNormal(const AValue: TBCExpButState);
+    procedure setFCustomStateClicked(const AValue: TBCExpButState);
+    procedure setFCustomStateHover(const AValue: TBCExpButState);
     procedure setFDelimeter(const AValue: string);
     procedure setFExpanedButtonCaptions(const AValue: string);
     procedure setFExpanedButtonAnswers(const AValue: string);
@@ -127,11 +128,11 @@ type
     {Allows you to have custom normal,hover and clicked states for the buttons}
     property CustomState: Boolean Read FCustomState Write setFCustomState;
     {Custom StateNormal parameters}
-    property CustomStateNormal:TBCButtonState Read FCustomStateNormal Write setFCustomStateNormal;
+    property CustomStateNormal:TBCExpButState Read FCustomStateNormal Write setFCustomStateNormal;
     {Custom StateClicked parameters}
-    property CustomStateClicked:TBCButtonState Read FCustomStateClicked Write setFCustomStateClicked;
+    property CustomStateClicked:TBCExpButState Read FCustomStateClicked Write setFCustomStateClicked;
     {Custom StateHover parameters}
-    property CustomStateHover:TBCButtonState Read FCustomStateHover Write setFCustomStateHover;
+    property CustomStateHover:TBCExpButState Read FCustomStateHover Write setFCustomStateHover;
     {Style of Panel (styBox,styHeaded,StyCallOut)}
     property PanelStyle:TBCExpandedPanelStyle Read FPanelStyle Write setFPanelStyle;
     {Height of the Callout when PanStyle=StyCallOut}
@@ -248,9 +249,12 @@ begin
       FPanelBorderColor := PanelBorderColor;
       FPanelColor := PanelColor;
       FCustomState:= CustomState;
-      FCustomStateNormal:= CustomStateNormal;
-      FCustomStateClicked:= CustomStateClicked;
-      FCustomStateHover:= CustomStateHover;
+      FCustomStateNormal.Assign(FCustomStateNormal);
+      FCustomStateClicked.Assign(FCustomStateClicked);
+      FCustomStateHover.Assign(FCustomStateHover);
+    //  FCustomStateNormal:= CustomStateNormal;
+    //  FCustomStateClicked:= CustomStateClicked;
+    //  FCustomStateHover:= CustomStateHover;
       FPanelStyle:=PanelStyle;
       FPanelStyleCallOutHeight:=PanelStyleCallOutHeight;
       FPanelShadow:=PanelShadow;
@@ -290,9 +294,9 @@ begin
     PanelStyle:=styHeaded;
     PanelStyleCallOutHeight:=10;
     PanelStyleCalloutPosition:=styAuto;
-    FCustomStateNormal:= self.StateNormal;
-    FCustomStateClicked:= self.StateClicked;
-    FCustomStateHover:= self.StateHover;
+    FCustomStateNormal:= TBCButtonState.Create(Self);//self.StateNormal;//CloneProperty(self.StateNormal,true,'StateNormal');
+    FCustomStateClicked:= TBCButtonState.Create(Self);//self.StateClicked;
+    FCustomStateHover:= TBCButtonState.Create(Self);//self.StateHover;
     FUpdateCaptionWithAnswer:=false;
   end;
   FSelected:=0;
@@ -311,10 +315,12 @@ begin
     FBackGroundBmp.Free;
     FBackGroundBmp:=nil;
   end;
+  FExpandingButtonOptions.FCustomStateNormal.free;
+  FExpandingButtonOptions.FCustomStateHover.free;
+  FExpandingButtonOptions.FCustomStateClicked.free;
   FExpandingButtonOptions.Free;
   inherited Destroy;
 end;
-
 
 
 procedure TBCExpandingButtonOptions.setFPanelShadowSize(const AValue:Integer);
@@ -362,19 +368,19 @@ begin
   if FCustomState<> AValue then FCustomState:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFCustomStateNormal(const AValue: TBCButtonState);
+procedure TBCExpandingButtonOptions.setFCustomStateNormal(const AValue: TBCExpButState);
 begin
-  if FCustomStateNormal<> AValue then FCustomStateNormal:=AValue;
+  if FCustomStateNormal<> AValue then FCustomStateNormal.Assign(AValue);//FCustomStateNormal:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFCustomStateClicked(const AValue: TBCButtonState);
+procedure TBCExpandingButtonOptions.setFCustomStateClicked(const AValue: TBCExpButState);
 begin
-  if FCustomStateClicked<> AValue then FCustomStateClicked:=AValue;
+  if FCustomStateClicked<> AValue then FCustomStateClicked.Assign(AValue);//FCustomStateClicked:=AValue;
 end;
 
-procedure TBCExpandingButtonOptions.setFCustomStateHover(const AValue: TBCButtonState);
+procedure TBCExpandingButtonOptions.setFCustomStateHover(const AValue: TBCExpButState);
 begin
-  if FCustomStateHover<> AValue then FCustomStateHover:=AValue;
+  if FCustomStateHover<> AValue then FCustomStateHover.Assign(AValue);//FCustomStateHover:=AValue;
 end;
 
 procedure TBCExpandingButtonOptions.setFCloseOnSelection(const AValue:Boolean);
