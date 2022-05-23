@@ -786,6 +786,8 @@ begin
       if ctrl is tbcbutton then
       if ctrl.Parent.Name=FButtonHoldingPanel.name then n:=ctrl.Parent.Name;
     end;
+    if ((Assigned(ctrl)) and (ctrl is tbcbutton) and (ctrl.Name=self.name)) then self.MouseEnter
+    else
     if n<>FButtonHoldingPanel.Name then
     begin
       New(MsgToSend);
@@ -1128,7 +1130,7 @@ begin
   inherited MouseEnter;
   if FExpandingButtonOptions.FAutoExpand then
   begin
-    if not FPanelCreated then
+   if not FPanelCreated then
     begin
       New(MsgToSend);
       MsgToSend^.APan:=nil;
