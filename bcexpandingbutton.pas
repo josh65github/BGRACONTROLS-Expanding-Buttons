@@ -46,6 +46,8 @@ type
     FButtonHeight:Integer;
     FButtonWidth:Integer;
     FMaxWidth:Integer;
+    FSelected:Integer;
+    FAnswerText:String;
     FCloseOnSelection:Boolean;
     FAlignPanel:TBCExpandedButtonAllignStyle;
     FSubButtonStyle:TBCExpandedButtonStyle;
@@ -61,7 +63,7 @@ type
     FAutoExpand:Boolean;
     FUpdateCaptionWithAnswer:Boolean;
     FCustomStateNormal,FCustomStateClicked,FCustomStateHover:TBCExpButState;
-  public
+  private
     procedure setFAutoExpand(const AValue: boolean);
     procedure setFCustomState(const AValue: boolean);
     procedure setFCustomStateNormal(const AValue: TBCExpButState);
@@ -89,6 +91,10 @@ type
     procedure setFSubButtonStyle(const AValue:TBCExpandedButtonStyle);
     procedure setFPanelStyleCallOutPosition(const AValue:TBCExpandedCallOutPosition);
     procedure setFSubButtonLayout(const AValue:TBCExpandedButtonLayout);
+    procedure setFSelected(const AValue: Integer);
+    procedure setFAnswerText(const AValue: String);
+  public
+    { Assign the properties from Source to this instance }
     procedure Assign(Source: TPersistent); override;
   published
     {When true the expanded menu appears/dissappears on entry/exit}
@@ -144,15 +150,20 @@ type
     {Size of the Panel Shadow in pixels}
     property PanelShadowSize:Integer Read FPanelShadowSize Write setFPanelShadowSize;
     property UpdateCaptionWithAnswer:boolean read FUpdateCaptionWithAnswer write SetFUpdateCaptionWithAnswer;
+    {Will Hold the Selected Value in the list when button clicked}
+    Property Selected : Integer Read FSelected Write setFSelected;
+    {Will Hold the text of the answer when button clicked}
+    Property AnswerText: String Read FAnswerText Write setFAnswerText;
+
   end;
 
   TBCExpandingButton = class(TBCButton)
   private
     FOwner: TComponent;
     FButtonHoldingPanel:TBCpanel;
-    FHowManyButtons:integer;
-    FSelected:Integer;
-    FAnswerText:String;
+   // FHowManyButtons:integer;
+  //  FSelected:Integer;
+  //  FAnswerText:String;
     FBackGroundBmp:TBitmap;
     FButtonCaptions,FButtonAnswers,FButtonHints:Array of AnsiString;
     FExpandingButtonOptions: TBCExpandingButtonOptions;
@@ -172,6 +183,7 @@ type
     procedure BCPanelAfterRender(Sender: TObject; const ABGRA: TBGRABitmap; ARect: TRect);
     procedure BCPanelMouseLeave(Sender: TObject);
   protected
+  //  FHowManyButtons:integer;
     function CountDelimeters(var st:ansistring):Integer;
     procedure StringToArray(var SA:Array of AnsiString;St:AnsiString;GenerateText:Boolean);
     function GetOwnerForm(AComponent: TComponent): TCustomForm;
@@ -182,18 +194,16 @@ type
     procedure MouseEnter; override;
     procedure MouseLeave; override;
   public
-
-    procedure setFSelected(const AValue: Integer);
-    procedure setFAnswerText(const AValue: String);
+    FHowManyButtons:integer;
+    { The passed string must be a var, as it can be changed by this routine }
+    function VerifyCSVString(Var AString:AnsiString):Boolean;
+    { Constructor }
     constructor Create(AOwner: TComponent); override;
+    { Destructor }
     destructor Destroy; override;
-    procedure Assign(Source: TPersistent); override;
     procedure paint; override;
   published
     property ExpandingButOptions: TBCExpandingButtonOptions read FExpandingButtonOptions write SetExpandingButtonOptions;
-    Property Selected : Integer Read FSelected Write setFSelected;
-    {Will Hold the text of the answer when button clicked}
-    Property AnswerText: String Read FAnswerText Write setFAnswerText;
     property OnClick;
     property OnDblClick;
     property OnMouseDown;
@@ -215,21 +225,13 @@ procedure Register;
 
 implementation
 
-procedure TBCExpandingButton.Assign(Source: TPersistent);
-begin
-  if Source is TBCExpandingButton then
-  begin
-    FSelected:=TBCExpandingButton(Source).Selected;
-  end
-  else inherited Assign(Source);
-end;
-
 procedure TBCExpandingButtonOptions.Assign(Source: TPersistent);
 begin
   if Source is TBCExpandingButtonOptions then
   begin
     with TBCExpandingButtonOptions(Source) do
     begin
+      FSelected:=Selected;
       FAutoExpand:=AutoExpand;
       FDelimeter :=ButtonCSVDelimterString;
       FExpanedButtonCaptions := ButtonCSVCaptions;
@@ -293,9 +295,10 @@ begin
     FCustomStateClicked:= TBCButtonState.Create(Self);
     FCustomStateHover:= TBCButtonState.Create(Self);
     FUpdateCaptionWithAnswer:=false;
+    FSelected:=0;
+    FAnswerText:='';
   end;
-  FSelected:=0;
-  FAnswerText:='';
+
   FButtonHoldingPanel:=nil;
   FremovingPanel:=false;
   FPanelCreated:=false;
@@ -420,19 +423,14 @@ begin
   inherited Paint;
 end;
 
-procedure TBCExpandingButton.setFAnswerText(const AValue: String);
+procedure TBCExpandingButtonOptions.setFAnswerText(const AValue: String);
 begin
   if FAnswerText<> AValue then FAnswerText:=AValue;
 end;
 
-procedure TBCExpandingButton.setFSelected(const AValue: Integer);
+procedure TBCExpandingButtonOptions.setFSelected(const AValue: Integer);
 begin
-  if csDesigning in ComponentState then
-  begin
-    FSelected:=AValue;
-    exit;
-  end;
-  if FSelected<> AValue then If ((AValue>0) and (AValue<FHowManyButtons)) then FSelected:=AValue;
+  if FSelected<> AValue then If AValue>=0 then FSelected:=AValue;
 end;
 
 procedure TBCExpandingButtonOptions.setFMaxWidth(const AValue: Integer);
@@ -573,6 +571,22 @@ begin
   end;
 end;
 
+function TBCExpandingButton.VerifyCSVString(Var AString:AnsiString):Boolean;
+begin
+  if FExpandingButtonOptions.FDelimeter='' then exit(false);
+  if AString='' then exit(false);
+  // remove start and end spaces
+  while AString[1]=' ' do AString:=copy(AString,2,Length(AString));
+  if AString='' then exit(false);
+  while AString[Length(AString)]=' ' do AString:=copy(AString,1,Length(AString)-1);
+  if AString='' then exit(false);
+  //remove any line ending chars from end
+  while AString[Length(AString)] in [chr(10),chr(13),','] do AString:=copy(AString,1,Length(AString)-1);
+  if ((AString[1]<>FExpandingButtonOptions.FDelimeter[1])
+   or (AString[Length(AString)]<>FExpandingButtonOptions.FDelimeter[length(FExpandingButtonOptions.FDelimeter)])) then exit(false);
+
+  result:=true;
+end;
 
 function TBCExpandingButton.CountDelimeters(var st:ansistring):Integer;
 var c:integer=1;
@@ -589,6 +603,7 @@ procedure TBCExpandingButton.StringToArray(var SA:Array of AnsiString;St:AnsiStr
 var I_cnt,C_cnt:Integer;
     s:ansistring;
 begin
+  if VerifyCSVString(st)=false then st:='';
   s:='';
   if st<>'' then
   begin
@@ -615,7 +630,7 @@ begin
   end;
   if C_Cnt<>FHowManyButtons then
   begin
-    if GenerateText then for I_cnt:=C_Cnt to FHowManyButtons do SA[I_cnt]:=MyIntToStr(I_cnt);
+    if GenerateText then for I_cnt:=C_Cnt+1 to FHowManyButtons do SA[I_cnt]:=MyIntToStr(I_cnt);
   end;
 end;
 
@@ -661,9 +676,9 @@ begin
   v:=MyStrToIntDef(copy(na,length(na)-3,4),-999);
   if v>=0 then
   begin
-    if FButtonAnswers[v]<>'' then AnswerText:=FButtonAnswers[v]
-    else AnswerText:=FButtonCaptions[v];
-    Selected:=v;
+    if FButtonAnswers[v]<>'' then FExpandingButtonOptions.AnswerText:=FButtonAnswers[v]
+    else FExpandingButtonOptions.AnswerText:=FButtonCaptions[v];
+    TBCExpandingButton(self).ExpandingButOptions.Selected:=v;
     SetSelectedAsDown;
   end;
   FButtonHoldingPanel.Refresh;
@@ -673,7 +688,7 @@ begin
     MsgToSend^.APan:= FButtonHoldingPanel;
     Application.QueueAsyncCall(@AutoCreateCloseExpandingButtons,PtrInt(MsgToSend));
   end;
-  if assigned(self.OnSelectionChanged) then OnSelectionChanged(self,FSelected);
+  if assigned(self.OnSelectionChanged) then OnSelectionChanged(self,TBCExpandingButton(self).ExpandingButOptions.FSelected);
 end;
 
 procedure TBCExpandingButton.SubButtonOnClick(Sender:TObject);
@@ -686,14 +701,14 @@ begin
   v:=MyStrToIntDef(copy(na,length(na)-3,4),-999);
   if v>=0 then
   begin
-    if FButtonAnswers[v]<>'' then AnswerText:=FButtonAnswers[v]
-    else AnswerText:=FButtonCaptions[v];
-    Selected:=v;
+    if FButtonAnswers[v]<>'' then TBCExpandingButton(self).ExpandingButOptions.AnswerText:=FButtonAnswers[v]
+    else TBCExpandingButton(self).ExpandingButOptions.AnswerText:=FButtonCaptions[v];
+    TBCExpandingButton(self).ExpandingButOptions.Selected:=v;
     SetSelectedAsDown;
     refresh;
   end;
   FButtonHoldingPanel.Refresh;
-  if assigned(self.OnSelectionChanged) then OnSelectionChanged(self,FSelected);
+  if assigned(self.OnSelectionChanged) then OnSelectionChanged(self,TBCExpandingButton(self).ExpandingButOptions.FSelected);
   if FExpandingButtonOptions.FCloseOnSelection then
   begin
     new(MsgToSend);
@@ -711,11 +726,11 @@ begin
     for i:=0 to FHowManyButtons do
     begin
       na:=self.Name+SubButtonName+IntToStringZeroPad(i,4);
-      tbcbutton(FButtonHoldingPanel.FindComponent(na)).Down:=i=FSelected;
+      tbcbutton(FButtonHoldingPanel.FindComponent(na)).Down:=i=TBCExpandingButton(self).ExpandingButOptions.FSelected;
       tbcbutton(FButtonHoldingPanel.FindComponent(na)).Refresh;
     end;
-    if FExpandingButtonOptions.FUpdateCaptionWithAnswer then TBCButton(self).Caption:=AnswerText;
-    application.ProcessMessages;
+    if FExpandingButtonOptions.FUpdateCaptionWithAnswer then TBCButton(self).Caption:=TBCExpandingButton(self).ExpandingButOptions.AnswerText;
+ //   application.ProcessMessages;
   end;
 end;
 
@@ -795,6 +810,7 @@ begin
       Application.QueueAsyncCall(@AutoCreateCloseExpandingButtons,PtrInt(MsgToSend));
     end;
   end;
+  //application.ProcessMessages;
 end;
 
 procedure TBCExpandingButton.BCPanelAfterRender(Sender: TObject; const ABGRA: TBGRABitmap; ARect: TRect);
@@ -904,28 +920,31 @@ begin
       brush.Color:=ExpandingButOptions.FPanelColor;
       brush.Style:=bsSolid;
       setlength(pts,8);
-      if ExpandingButOptions.FCallOutPositionTop then
+      with  ExpandingButOptions do
       begin
-        addpoint(0,x1,y1+ExpandingButOptions.FPanelStyleCallOutHeight);
-        addpoint(1,CalloutBubbleX,y1+ExpandingButOptions.FPanelStyleCallOutHeight);
-        addpoint(2,CalloutBubbleX+ExpandingButOptions.FPanelStyleCallOutHeight,y1);
-        addpoint(3,CalloutBubbleX+ExpandingButOptions.FPanelStyleCallOutHeight+ExpandingButOptions.FPanelStyleCallOutHeight,
-                 y1+ExpandingButOptions.FPanelStyleCallOutHeight);
-        addpoint(4,x2-offset,y1+ExpandingButOptions.FPanelStyleCallOutHeight);
+      if FCallOutPositionTop then
+      begin
+        addpoint(0,x1,y1+FPanelStyleCallOutHeight);
+        addpoint(1,CalloutBubbleX,y1+FPanelStyleCallOutHeight);
+        addpoint(2,CalloutBubbleX+FPanelStyleCallOutHeight,y1);
+        addpoint(3,CalloutBubbleX+FPanelStyleCallOutHeight+FPanelStyleCallOutHeight,
+                 y1+FPanelStyleCallOutHeight);
+        addpoint(4,x2-offset,y1+FPanelStyleCallOutHeight);
         addpoint(5,x2-offset,y2-offset);
         addpoint(6,x1,y2-offset);
-        addpoint(7,x1,y1+ExpandingButOptions.FPanelStyleCallOutHeight);
+        addpoint(7,x1,y1+FPanelStyleCallOutHeight);
       end
       else
       begin
         addpoint(0,x1,y1);
         addpoint(1,x2-offset,y1);
-        addpoint(2,x2-offset,y2-ExpandingButOptions.FPanelStyleCallOutHeight-offset);
-        addpoint(3,CalloutBubbleX+ExpandingButOptions.FPanelStyleCallOutHeight,y2-ExpandingButOptions.FPanelStyleCallOutHeight-offset);
-        addpoint(4,CalloutBubbleX,y2-offset);
-        addpoint(5,CalloutBubbleX-ExpandingButOptions.FPanelStyleCallOutHeight,y2-ExpandingButOptions.FPanelStyleCallOutHeight-offset);
-        addpoint(6,x1,y2-ExpandingButOptions.FPanelStyleCallOutHeight-offset);
+        addpoint(2,x2-offset,y2-FPanelStyleCallOutHeight-offset);
+        addpoint(3,CalloutBubbleX+FPanelStyleCallOutHeight+FPanelStyleCallOutHeight,y2-FPanelStyleCallOutHeight-offset);
+        addpoint(4,CalloutBubbleX+FPanelStyleCallOutHeight,y2-offset);
+        addpoint(5,CalloutBubbleX,y2-FPanelStyleCallOutHeight-offset);
+        addpoint(6,x1,y2-FPanelStyleCallOutHeight-offset);
         addpoint(7,x1,y1);
+      end;
       end;
       polyGon(pts);
     end;
@@ -1009,7 +1028,7 @@ begin
       SetBounds(x,y,FExpandingButtonOptions.FButtonWidth,FExpandingButtonOptions.FButtonHeight);
       CalculatingMaxX:=x+FExpandingButtonOptions.FButtonWidth;
       Cursor:=self.Cursor;
-      Down:=fselected=i;
+      Down:=TBCExpandingButton(self).ExpandingButOptions.fselected=i;
       Caption:=FButtonCaptions[i];
       OnMouseUp:=@self.SubButtonMouseUp;//SubButtonOnClick;      SubButtonMouseUp
       visible:=true;
@@ -1083,7 +1102,7 @@ begin
   FButtonHoldingPanel.SetBounds(PanelX,PanelY,PanelWidth,PanelHeight);
   FBackGroundBmp.SetSize(PanelWidth, PanelHeight);
   FBackGroundBmp.Canvas.CopyRect(Rect(0,0,PanelWidth,PanelHeight),
-                                 GetOwnerForm(self).Canvas, Rect(PanelX,PanelY+1,PanelX+PanelWidth,PanelY+1+PanelHeight));
+                                 GetOwnerForm(self).Canvas, Rect(PanelX,PanelY,PanelX+PanelWidth,PanelY+PanelHeight));
   FButtonHoldingPanel.Visible:=true;
   FButtonHoldingPanel.Refresh;
 end;
@@ -1163,6 +1182,7 @@ begin
       end;
     end;
   end;
+  //application.ProcessMessages;
 end;
 
 

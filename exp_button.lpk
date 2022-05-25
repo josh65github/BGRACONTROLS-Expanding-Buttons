@@ -11,9 +11,10 @@
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <CodeGeneration>
+        <SmartLinkUnit Value="True"/>
         <RelocatableUnit Value="True"/>
         <Optimizations>
-          <OptimizationLevel Value="0"/>
+          <OptimizationLevel Value="3"/>
         </Optimizations>
       </CodeGeneration>
       <Linking>
@@ -27,7 +28,7 @@
         <WriteFPCLogo Value="False"/>
       </Other>
     </CompilerOptions>
-    <Version Minor="1" Release="16" Build="143"/>
+    <Version Minor="1" Release="18" Build="157"/>
     <Files Count="1">
       <Item1>
         <Filename Value="bcexpandingbutton.pas"/>
