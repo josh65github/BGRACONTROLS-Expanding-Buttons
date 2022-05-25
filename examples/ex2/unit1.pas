@@ -42,7 +42,6 @@ type
       );
     procedure BCExpandingButton5SelectionChanged(Sender: TObject; Value: Integer
       );
-    procedure BCPanel1MouseLeave(Sender: TObject);
   private
 
   public
@@ -67,7 +66,7 @@ end;
 procedure TForm1.BCExpandingButton1SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
-  updatelabels(label1,label2,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
+  updatelabels(label1,label2,TBCExpandingButton(sender).ExpandingButOptions.Selected.ToString,TBCExpandingButton(sender).ExpandingButOptions.answertext);
 end;
 
 procedure TForm1.BCExpandingButton1MouseUp(Sender: TObject;
@@ -84,31 +83,27 @@ end;
 procedure TForm1.BCExpandingButton2SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
-  updatelabels(label3,label4,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
+  updatelabels(label3,label4,TBCExpandingButton(sender).ExpandingButOptions.Selected.ToString,TBCExpandingButton(sender).ExpandingButOptions.answertext);
 end;
 
 procedure TForm1.BCExpandingButton3SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
-  updatelabels(label5,label6,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
+  updatelabels(label5,label6,TBCExpandingButton(sender).ExpandingButOptions.Selected.ToString,TBCExpandingButton(sender).ExpandingButOptions.answertext);
 end;
 
 procedure TForm1.BCExpandingButton4SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
-  updatelabels(label7,label8,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
+  updatelabels(label7,label8,TBCExpandingButton(sender).ExpandingButOptions.Selected.ToString,TBCExpandingButton(sender).ExpandingButOptions.answertext);
 end;
 
 procedure TForm1.BCExpandingButton5SelectionChanged(Sender: TObject;
   Value: Integer);
 begin
-  updatelabels(label9,label10,TBCExpandingButton(sender).Selected.ToString,TBCExpandingButton(sender).answertext);
+  updatelabels(label9,label10,TBCExpandingButton(sender).ExpandingButOptions.Selected.ToString,TBCExpandingButton(sender).ExpandingButOptions.answertext);
 end;
 
-procedure TForm1.BCPanel1MouseLeave(Sender: TObject);
-begin
-
-end;
 
 end.
 
