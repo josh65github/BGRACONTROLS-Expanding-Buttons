@@ -142,9 +142,9 @@ begin
 end;
 
 procedure TExample3.lower_panelPaint(Sender: TObject);
-const z=64;
+const z=16;
       c1:tcolor=$001B1B1B;
-      c2:tcolor=$00550055;
+      c2:tcolor=$00555500;
 var x,y:longint;
     c:tcolor;
     f:boolean=false;
@@ -159,7 +159,7 @@ begin
       f:=g;
       repeat
         if f then Brush.Color:=c2 else Brush.Color:=c1;
-        FillRect(x,y,x+z,y+z);
+        Ellipse(x,y,x+z,y+z);
         inc(x,z);
         f:=not f;
       until x>tpanel(sender).Width;
